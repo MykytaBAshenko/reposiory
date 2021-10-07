@@ -13,13 +13,15 @@ import axios from 'axios'
 // import Home from '../body/home/Home'
 
 const Home = () => {
-    useEffect(() => { }, [
+    useEffect(() => { 
         axios.post("/rest/v1/data/current-list", {
             "per-page": 20,
             "page": 0
         }).then(res => {
             console.log(res)
         })
+    }, [
+
     ])
     return (
         <div className="page-content-wrapper py-3">
