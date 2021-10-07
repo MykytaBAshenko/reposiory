@@ -7,8 +7,7 @@ import Header from './components/header/Header'
 import Body from './components/body/Body'
 import axios from 'axios';
 axios.defaults.baseURL = "http://jl5.work:10039/"
-axios.defaults.headers.common['Authorization'] = "Bearer "+ localStorage.getItem("token")
-
+axios.defaults.headers.common = {'Authorization': `Bearer ${localStorage.getItem("token")}`}
 
 function App() {
   const dispatch = useDispatch()

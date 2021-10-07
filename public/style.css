@@ -7184,3 +7184,31 @@ div.dataTables_wrapper div.dataTables_paginate {
 .display-none{
   display: none !important;
 }
+
+
+
+
+
+
+
+.data-table{
+  width: 100%;
+}
+
+.data-table *{
+  max-width: 100%;
+}
+.data-table > *{
+  overflow-y: auto;
+}
+.card{
+  width: 100%;
+}
+#dataTable_wrapper{
+  width: 100%;
+}
+#dataTable{
+  max-width: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
