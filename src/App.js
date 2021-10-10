@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { dispatchLogin, fetchUser, dispatchGetUser } from './redux/actions/authAction'
+import { Switch, Route } from 'react-router-dom'
 
 import Header from './components/header/Header'
 import Body from './components/body/Body'
@@ -18,10 +19,9 @@ function App() {
     const firstLogin = localStorage.getItem('firstLogin')
     const token = localStorage.getItem('token')
     if(token) {
-      axios.post('/rest/v1/get-profile', null).then(res =>  dispatch(dispatchGetUser(res)))
+       axios.post('/rest/v1/get-profile', null).then(res =>  dispatch(dispatchGetUser(res)))
     }
-    console.log(1)
-  }, [localStorage.getItem('token')])
+  }, [token])
 
 
 
@@ -31,7 +31,9 @@ function App() {
         {/* {auth.isLogged ?
         <Header />: null
         } */}
-        <Body />
+            <Switch>
+              <Route path="/" component={Body}/>
+            </Switch>
       </div>
     </Router>
   );

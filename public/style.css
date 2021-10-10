@@ -7209,6 +7209,12 @@ div.dataTables_wrapper div.dataTables_paginate {
 }
 #dataTable{
   max-width: 100%;
-  overflow-y: hidden;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.tableContainer{
+  width: 100%;
+  overflow: hidden;
   overflow-x: auto;
 }

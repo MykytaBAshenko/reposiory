@@ -3,25 +3,37 @@
 import React, { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-
+import axios from 'axios'
 
 const MobileNavbarSidebar = () => {
   const auth = useSelector(state => state.auth)
     const { isLogged, user } = auth
+    const handleLogout = async () => {
+        try {
+            localStorage.removeItem('firstLogin')
+            localStorage.removeItem('token')
+            await axios.get('/rest/v1/logout')
+
+            window.location.href = "/login";
+        } catch (err) {
+            window.location.href = "/";
+        }
+    }
+    const [affanNavbarToggler, setaffanNavbarToggler] = useState(false)
   return(
     <div>
     <div className="header-area" id="headerArea">
     <div className="container">
         <div className="header-content header-style-five position-relative d-flex align-items-center justify-content-between">
-            <div className="logo-wrapper"><a href="page-home.html"><img src="img/core-img/logo.png" alt="" /></a></div>
-            <div className="navbar--toggler" id="affanNavbarToggler"><span className="d-block"></span><span className="d-block"></span><span className="d-block"></span></div>
+            <div className="logo-wrapper"><a href="page-home.html"><img src="/img/core-img/logo.png" alt="" /></a></div>
+            <div className="navbar--toggler" onClick={() => setaffanNavbarToggler(!affanNavbarToggler)} idid="affanNavbarToggler"><span className="d-block"></span><span className="d-block"></span><span className="d-block"></span></div>
         </div>
     </div>
 </div>
 
-<div className="sidenav-black-overlay"></div>
-<div className="sidenav-wrapper" id="sidenavWrapper">
-    <div className="go-back-btn" id="goBack">
+<div onClick={() => setaffanNavbarToggler(!affanNavbarToggler)} className={"sidenav-black-overlay " + (affanNavbarToggler ? "active" : "") }></div>
+<div className={"sidenav-wrapper " + (affanNavbarToggler ? "nav-active" : "")} idid="sidenavWrapper">
+    <div className="go-back-btn" onClick={() => setaffanNavbarToggler(!affanNavbarToggler)}>
         <svg className="bi bi-x" width="24" height="24" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path fillRule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"></path>
             <path fillRule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"></path>
@@ -68,7 +80,7 @@ const MobileNavbarSidebar = () => {
                 <path fillRule="evenodd" d="M7.646 1.146a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 .146.354v7a.5.5 0 0 1-.5.5H9.5a.5.5 0 0 1-.5-.5v-4H7v4a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .146-.354l6-6zM2.5 7.707V14H6v-4a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4h3.5V7.707L8 2.207l-5.5 5.5z" />
                 <path fillRule="evenodd" d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
             </svg>Contact Us</a></li>
-        <li><a href="login.html">
+        <li><a onClick={handleLogout}>
             <svg width="18" height="18" viewBox="0 0 16 16" className="bi bi-box-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fillRule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
                 <path fillRule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />

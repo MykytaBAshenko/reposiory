@@ -20,7 +20,7 @@ export const dispatchGetUser = (res) => {
         type: ACTIONS.GET_USER,
         payload: {
             user: res.data,
-            isLogged: true
+            isLogged: res.data.error ? false : true
         }
     }
 }

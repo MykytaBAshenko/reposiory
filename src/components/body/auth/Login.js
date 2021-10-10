@@ -1,21 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { dispatchLogin, dispatchGetUser } from '../../../redux/actions/authAction'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
-const HOME_URL = process.env.REACT_APP_SOCKET_SERVER_URL
 
-const initialState = {
-    email: '',
-    password: '',
-    err: '',
-    success: ''
-}
-
-function Login() {
-    const [user, setUser] = useState(initialState)
+function Login(props) {
     const dispatch = useDispatch()
     const history = useHistory()
     const [username, setusername] = useState("")
@@ -27,12 +18,12 @@ function Login() {
     //     const { name, value } = e.target
     //     setUser({ ...user, [name]: value, err: '', success: '' })
     // }
+    
 
     const handleSubmit = async e => {
 
         e.preventDefault()
         const res = await axios.post('/rest/v1/login', { username, password })
-        console.log(res)
         // alert(res?.data?.msg)
         if (res?.data?.token) {
             localStorage.setItem('firstLogin', true)
@@ -40,13 +31,26 @@ function Login() {
             dispatch(dispatchLogin())
             axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token")
 
-            axios.post('/rest/v1/get-profile', null).then(res => dispatch(dispatchGetUser(res)))
-
+            await axios.post('/rest/v1/get-profile', null).then(res => dispatch(dispatchGetUser(res)))
+            console.log(1)
             history.push("/")
+            
         }
-
-
     }
+    const auth = useSelector(state =>
+        state.auth)
+    const { isLogged, user } = auth
+
+    const check_is_login = () => {
+        if(user.error || !Object.keys(user).length)
+        return false;
+        return true;
+    }
+
+    useEffect(() => {
+        if(check_is_login())
+            props.history.push("/")
+    },[user])
     return (
         <div>
             <div className="internet-connection-status" id="internetStatus"></div>
