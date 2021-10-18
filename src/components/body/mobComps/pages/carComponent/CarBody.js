@@ -2,17 +2,131 @@ import React, { useState, useEffect } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
+import Dropzone from 'react-dropzone';
 const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL ? process.env.REACT_APP_SERVER_URL : "http://jl5.work:10039/"
 
+
+
+// function FileUpload(props) {
+
+// 	const [Images, setImages] = useState([])
+// 	const [imageInput, setImageInput] = useState('')
+  
+// 	const onDrop = (files) => {
+  
+// 		let formData = new FormData();
+// 		const config = {
+// 			header: { 'content-type': 'multipart/form-data' }
+// 		}
+// 		formData.append("file", files[0])
+// 		//save the Image we chose inside the Node Server 
+// 		axios.post('/api/product/uploadImage', formData, config)
+// 			.then(response => {
+// 				if (response.data.success) {
+// 					setImages([...Images, response.data.image])
+// 					props.refreshFunction([...Images, response.data.image])
+// 				} else {
+// 					alert('Failed to save the Image in Server')
+// 				}
+// 			})
+// 	}
+  
+  
+// 	const onDelete = (image) => {
+// 		const currentIndex = Images.indexOf(image);
+  
+// 		let newImages = [...Images]
+// 		newImages.splice(currentIndex, 1)
+  
+// 		setImages(newImages)
+// 		props.refreshFunction(newImages)
+// 	}
+   
+// 	const addLinkImg = () => {
+// 	  setImages([...Images, imageInput])
+// 	  props.refreshFunction([...Images, imageInput])
+// 	  setImageInput('')
+// 	}
+  
+// 	return (
+// 	  <>
+// 		<div className="image-uploader" >
+// 			<Dropzone
+// 				onDrop={onDrop}
+// 				multiple={false}
+// 				maxSize={800000000}
+// 			>
+// 				{({ getRootProps, getInputProps }) => (
+// 					<div className="dropzone"
+// 						{...getRootProps()}
+// 					>
+// 						<input {...getInputProps()} />
+// 						<Icon type="plus" style={{ fontSize: '3rem' }} />
+  
+// 					</div>
+// 				)}
+// 			</Dropzone>
+  
+// 			<div className="upload-images" style={{ display: 'flex',  height: '240px', overflowX: 'scroll' }}>
+  
+// 				{Images.map((image, index) => (
+// 						<img key={index+`${config.MAGIC_HOST}/${image}`} onClick={() => onDelete(image)} src={(image.substring(0, 7) === 'uploads') ? `${config.MAGIC_HOST}/${image}` : `${image}`} alt={`productImg-${index}`} />
+// 				))}
+  
+  
+// 			</div>
+  
+// 		</div>
+// 		<div className="input-image-link">
+// 		<input value={imageInput} placeholder="Because hosting is free, files are deleted after 15 minutes, so upload links of image"  onChange={(e) => setImageInput(e.target.value)}/> <button  onClick={addLinkImg} type="button">Set image link</button>
+// 		</div>
+// 	  </>
+// 	)
+//   }
 
 
 const CarBody = (props) => {
 const [data, setdata] = useState({})
 const [show, setshow] = useState(0)
+const [callback, setcallback] = useState(false)
   useEffect(() => {
 	  console.log(props)
     axios.post(`/rest/v1/data/get-all-info?item_id=${props.match.params.carId}`).then(d => setdata(d.data))
-  },[props])
+  },[props,callback])
+
+  	const onDropCarfax = (files) => {
+		console.log(files)
+		let formData = new FormData();
+		const config = {
+			header: { 'content-type': 'multipart/form-data' }
+		}
+		formData.append("imageURL", files[0])
+
+		formData.append("item_id", data.information.item_id)
+		console.log(formData)
+		axios.post('/rest/v1/data/create-swift', formData, config)
+			.then(response => {
+			setcallback(!callback)
+
+			})
+	}
+
+	const onDropDocument = (files) => {
+		let formData = new FormData();
+		const config = {
+			header: { 'content-type': 'multipart/form-data' }
+		}
+		formData.append("imageURL", files[0])
+
+		formData.append("item_id", data.information.item_id)
+		console.log(formData)
+		axios.post('/rest/v1/data/create-document', formData, config)
+			.then(response => {
+				setcallback(!callback)
+
+			})
+
+	}
   return  <div className="container">
         <div className="card">
           {console.log(data)}
@@ -200,7 +314,28 @@ const [show, setshow] = useState(0)
 				<div className="tab-pane fade" id="doc" role="tabpanel" aria-labelledby="doc-tab">
 				  <div className="container">
 					<div className="card-c">
-					  <div className="card-body text-center">
+					<Dropzone
+ 				onDrop={onDropDocument}
+ 				multiple={false}
+ 				maxSize={800000000}
+ 			>
+				 {({ getRootProps, getInputProps }) =>  <div {...getRootProps()} className="card-body text-center">
+						<input onChange={e => e.preventDefault()} {...getInputProps()} />
+						<h5 className="mb-4">Upload your Documents</h5>
+						<form>
+						  <div className="form-file">
+							<div  className="form-control d-none" />
+							<label className="form-file-label justify-content-center" ><span className="form-file-button btn btn-danger d-flex align-items-center justify-content-center">
+								<svg width="22" height="22" viewBox="0 0 16 16" className="bi bi-plus-circle me-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+								<path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+								</svg>Upload File</span></label>
+						  </div>
+						</form>
+					  </div>
+}
+					  </Dropzone>
+					  {/* <div className="card-body text-center">
 						<h5 className="mb-4">Upload your Documents</h5>
 						<form action="element-form-file-upload.html#" method="GET">
 						  <div className="form-file">
@@ -212,7 +347,7 @@ const [show, setshow] = useState(0)
 								</svg>Upload File</span></label>
 						  </div>
 						</form>
-					  </div>
+					  </div> */}
 					</div>
 						<table className="table mb-0 table-striped">
 						  <thead>
@@ -238,12 +373,18 @@ const [show, setshow] = useState(0)
 				  <div className="divider border-danger"></div>
 				  <div className="container">
 					<div className="card-c">
-					  <div className="card-body text-center">
+					<Dropzone
+ 				onDrop={onDropCarfax}
+ 				multiple={false}
+ 				maxSize={800000000}
+ 			>
+				 {({ getRootProps, getInputProps }) =>  <div {...getRootProps()} className="card-body text-center">
+						<input onChange={e => e.preventDefault()} {...getInputProps()} />
 						<h5 className="mb-4">Upload your Swift</h5>
-						<form action="element-form-file-upload.html#" method="GET">
+						<form>
 						  <div className="form-file">
-							<input className="form-control d-none" id="customFile" type="file"/>
-							<label className="form-file-label justify-content-center" for="customFile"><span className="form-file-button btn btn-danger d-flex align-items-center justify-content-center">
+							<div  className="form-control d-none" />
+							<label className="form-file-label justify-content-center" ><span className="form-file-button btn btn-danger d-flex align-items-center justify-content-center">
 								<svg width="22" height="22" viewBox="0 0 16 16" className="bi bi-plus-circle me-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 								<path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
 								<path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -251,6 +392,8 @@ const [show, setshow] = useState(0)
 						  </div>
 						</form>
 					  </div>
+}
+					  </Dropzone>
 					</div>
 						<table className="table mb-0 table-striped">
 						  <thead>

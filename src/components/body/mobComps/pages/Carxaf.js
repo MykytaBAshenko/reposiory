@@ -31,12 +31,12 @@ const Carfax = () => {
           <div className="form-group">
             <input className="form-control" id="exampleInputText" type="text" value={inputValue} onChange={(e) => setinputValue(e.target.value)} placeholder="Enter VIN Number"/>
           </div>
-          <div className="form-check">
+          <div className="form-control-mine">
             <input className="form-check-input form-check-danger" type="checkbox" value={enru} onChange={() => setenru(!enru)} id="dangerCheckbox" checked={enru}/>
             <label className="form-check-label" for="dangerCheckbox">En</label><label>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </label>
-            <label>84 free reguests remain</label>
+            {/* <label>84 free reguests remain</label> */}
             <br/>
           </div>
           <a className="btn btn-creative btn-danger btn-lg" onClick={carfaxRequest}>Submit</a>
