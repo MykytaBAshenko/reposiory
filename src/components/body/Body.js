@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import MobileFooter from './mobComps/MobileFooter'
 import MobileNavbarSidebar from './mobComps/MobileNavbarSidebar'
 import Carfax from './mobComps/pages/Carxaf'
-
+import MobileCarNavbar from "./mobComps/MobileCarNavbar"
 import IndexPage from './mobComps/pages/IndexPage'
 import { dispatchLogin, dispatchGetUser } from '../../redux/actions/authAction'
 
@@ -20,7 +20,7 @@ import axios from 'axios'
 
 
 function Body(props) {
-
+    const [carname, setcarname] = useState("")
     const check_token = () => {
         axios.post('/rest/v1/get-profile', null).then(d => {
             if(d.data.error){
@@ -54,6 +54,7 @@ function Body(props) {
 
             <Switch>
             <Route path="/login" component={null} exact />
+            <Route path="/car/:carId" component={MobileCarNavbar} />
 
                 <Route path="*" component={MobileNavbarSidebar}  />
 
@@ -63,7 +64,7 @@ function Body(props) {
 
             <Switch>
                 <Route path="/" component={check_is_login() ? IndexPage : Login} exact />
-                <Route path="/car/:carId" component={check_is_login() ? CarBody : Login} exact />
+                <Route path="/car/:carId" setcarname={setcarname} component={check_is_login() ? (props) => (<CarBody match={props.match} history={props.history} setcarname={setcarname}/>) : Login} exact />
                 <Route path="/carfax" component={check_is_login() ? Carfax : Login} exact />
 
 

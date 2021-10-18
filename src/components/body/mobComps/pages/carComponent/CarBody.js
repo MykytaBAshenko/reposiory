@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
-const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL 
+const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL ? process.env.REACT_APP_SERVER_URL : "http://jl5.work:10039/"
 
 
 
@@ -10,6 +10,7 @@ const CarBody = (props) => {
 const [data, setdata] = useState({})
 const [show, setshow] = useState(0)
   useEffect(() => {
+	  console.log(props)
     axios.post(`/rest/v1/data/get-all-info?item_id=${props.match.params.carId}`).then(d => setdata(d.data))
   },[props])
   return  <div className="container">
