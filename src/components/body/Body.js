@@ -7,6 +7,8 @@ import NotFound from '../utils/NotFound/NotFound'
 import { useSelector, useDispatch } from 'react-redux'
 import MobileFooter from './mobComps/MobileFooter'
 import MobileNavbarSidebar from './mobComps/MobileNavbarSidebar'
+import Carfax from './mobComps/pages/Carxaf'
+
 import IndexPage from './mobComps/pages/IndexPage'
 import { dispatchLogin, dispatchGetUser } from '../../redux/actions/authAction'
 
@@ -49,7 +51,6 @@ function Body(props) {
 
     return (
         <section>
-{console.log(props)}
 
             <Switch>
             <Route path="/login" component={null} exact />
@@ -58,10 +59,12 @@ function Body(props) {
 
 
             </Switch>
+            <div className="page-content-wrapper py-3">
 
             <Switch>
                 <Route path="/" component={check_is_login() ? IndexPage : Login} exact />
                 <Route path="/car/:carId" component={check_is_login() ? CarBody : Login} exact />
+                <Route path="/carfax" component={check_is_login() ? Carfax : Login} exact />
 
 
                 {/* <Route path="/questions" component={Home} exact />
@@ -97,7 +100,7 @@ function Body(props) {
                 <Route path="/edit_user/:id" component={isAdmin ? EditUser : NotFound} exact />
                  */}
             </Switch>
-
+                </div>
             <Switch>
                 <Route path="/login" component={null} />
 

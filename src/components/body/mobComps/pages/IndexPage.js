@@ -35,7 +35,6 @@ const IndexPage = () => {
   } 
   useEffect(() => { }, [selectedcount, whichpage, cars, search])
   return (
-      <div className="page-content-wrapper py-3">
 
 
           <div className="container">
@@ -172,8 +171,6 @@ const IndexPage = () => {
               </div>
 
           </div>
-
-      </div>
 
   )
 }
